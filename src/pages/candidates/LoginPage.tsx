@@ -117,6 +117,11 @@ function LoginPage() {
             >
               Login
             </Button>
+            <div className="my-2 text-center">
+              <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                CBT Interface
+              </Typography>
+            </div>
           </Box>
         </Paper>
       </Fade>
