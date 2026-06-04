@@ -1,18 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useAppUser } from "../context/AppUserContext";
-import { AdminPublicRoutes, privateAdminRoutes } from "./adminRoutes";
-import {
-  CandidatePublicRoutes,
-  privateCandidateRoutes,
-} from "./candidateRoutes";
-import {
-  privateQuestionStationRoutes,
-  QuestionStationRoutes,
-} from "./questionStationRoutes";
-import {
-  privateProcedureStationRoutes,
-  ProcedureStationRoutes,
-} from "./procedureStationRoutes";
+
+import { AdminRoutes } from "./adminRoutes";
+
+import { useAuth } from "./useAuth";
 
 export const appRoles = {
   admin: "admin",
@@ -22,37 +12,19 @@ export const appRoles = {
 };
 
 export default function AppRouter() {
-  const { user } = useAppUser();
+  const { user, loading } = useAuth();
 
-  const privateRoutes = () => {
-    if (!user) return [];
-    if (user.role === appRoles.admin) return privateAdminRoutes;
-
-    if (user.role === appRoles.candidate) return privateCandidateRoutes;
-
-    if (user.role === appRoles.questionStation)
-      return privateQuestionStationRoutes;
-
-    if (user.role === appRoles.procedureStation)
-      return privateProcedureStationRoutes;
-    return [];
-  };
-
-  const publicRoutes = [
-    { path: "/*", component: <CandidatePublicRoutes /> },
-    { path: "/admin/*", component: <AdminPublicRoutes /> },
-    { path: "/procedurestation/*", component: <ProcedureStationRoutes /> },
-    { path: "/questionstation/*", component: <QuestionStationRoutes /> },
-  ];
-
-  const routesToDisplay = user ? privateRoutes() : publicRoutes;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <BrowserRouter>
       <Routes>
-        {routesToDisplay.map((route) => (
+        <Route path="/admin/*" element={<AdminRoutes user={user} />} />
+        {/* {routesToDisplay.map((route) => (
           <Route key={route.path} path={route.path} element={route.component} />
-        ))}
+        ))} */}
       </Routes>
     </BrowserRouter>
   );

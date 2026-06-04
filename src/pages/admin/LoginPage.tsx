@@ -25,6 +25,7 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [userData, setUserData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -32,15 +33,18 @@ function LoginPage() {
 
   const loginCentre = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     console.log(userData);
 
     try {
       const { data } = await httpService.post("/centre/login", userData);
 
       toast.success(data);
+      window.location.assign("/admin");
     } catch (error) {
       toastError(error);
     }
+    setLoading(false);
   };
   return (
     <Box
@@ -163,6 +167,8 @@ function LoginPage() {
                 variant="contained"
                 endIcon={<Login />}
                 type="submit"
+                loading={loading}
+                loadingPosition="end"
                 sx={{
                   py: 1.7,
                   borderRadius: 3,
