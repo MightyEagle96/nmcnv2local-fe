@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AdminRoutes } from "./adminRoutes";
 
 import { useAuth } from "./useAuth";
+import { CandidateRoutes } from "./candidateRoutes";
+import { ProcedureStationRoutes } from "./procedureStationRoutes";
+import { QuestionStationRoutes } from "./questionStationRoutes";
 
 export const appRoles = {
   admin: "admin",
@@ -21,10 +24,16 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/*" element={<CandidateRoutes user={user} />} />
         <Route path="/admin/*" element={<AdminRoutes user={user} />} />
-        {/* {routesToDisplay.map((route) => (
-          <Route key={route.path} path={route.path} element={route.component} />
-        ))} */}
+        <Route
+          path="/procedurestation/*"
+          element={<ProcedureStationRoutes user={user} />}
+        />
+        <Route
+          path="/questionstation/*"
+          element={<QuestionStationRoutes user={user} />}
+        />
       </Routes>
     </BrowserRouter>
   );

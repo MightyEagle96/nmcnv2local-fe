@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import LoginPage from "../pages/admin/LoginPage";
 import { appRoles } from "./AppRouter";
+import type { User } from "../context/AppUserContext";
 
 const publicAdminRoutes = [{ path: "/", component: <LoginPage /> }];
 
@@ -27,7 +28,7 @@ function AdminPrivateRoutes() {
   );
 }
 
-export function AdminRoutes({ user }: any) {
+export function AdminRoutes({ user }: { user: User | null }) {
   if (user && user.role === appRoles.admin) {
     return <AdminPrivateRoutes />;
   }

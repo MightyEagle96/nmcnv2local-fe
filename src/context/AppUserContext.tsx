@@ -1,7 +1,7 @@
 // src/context/AppUserContext.jsx
 import React, { createContext, useContext, useState } from "react";
 
-type User = {
+export type User = {
   id: string;
   name: string;
   username: string;
