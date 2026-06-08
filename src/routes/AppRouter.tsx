@@ -7,6 +7,8 @@ import { CandidateRoutes } from "./candidateRoutes";
 import { ProcedureStationRoutes } from "./procedureStationRoutes";
 import { QuestionStationRoutes } from "./questionStationRoutes";
 
+import Navbar from "../components/AdminNavbar";
+
 export const appRoles = {
   admin: "admin",
   candidate: "candidate",
@@ -20,9 +22,12 @@ export default function AppRouter() {
   if (loading) {
     return <div>Loading...</div>;
   }
+  if (user) {
+  }
 
   return (
     <BrowserRouter>
+      {user && user.role === appRoles.admin && <Navbar />}
       <Routes>
         <Route path="/*" element={<CandidateRoutes user={user} />} />
         <Route path="/admin/*" element={<AdminRoutes user={user} />} />

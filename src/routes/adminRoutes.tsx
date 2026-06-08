@@ -3,10 +3,16 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import LoginPage from "../pages/admin/LoginPage";
 import { appRoles } from "./AppRouter";
 import type { User } from "../context/AppUserContext";
+import CbtDashboard from "../pages/admin/cbt/CbtDashboard";
+import DownloadUpload from "../pages/admin/cbt/DownloadUpload";
 
 const publicAdminRoutes = [{ path: "/", component: <LoginPage /> }];
 
-const privateAdminRoutes = [{ path: "/", component: <AdminDashboard /> }];
+const privateAdminRoutes = [
+  { path: "/", component: <AdminDashboard /> },
+  { path: "/cbt", component: <CbtDashboard /> },
+  { path: "/cbt/download&upload", component: <DownloadUpload /> },
+];
 
 function AdminPublicRoutes() {
   return (
