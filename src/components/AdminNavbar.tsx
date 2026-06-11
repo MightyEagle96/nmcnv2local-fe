@@ -13,6 +13,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppUser } from "../context/AppUserContext";
+import { httpService } from "../httpService";
+import { toastError } from "../components/ErrorToast";
 
 const cbtLinks = [
   { label: "Dashboard", path: "/admin/cbt" },
@@ -62,6 +64,18 @@ export default function Navbar() {
     },
   };
 
+  const handleLogout = async () => {
+    try {
+      const { data } = await httpService.get("/auth/logout");
+      if (data) {
+        window.location.assign("/admin");
+      }
+    } catch (error) {
+      {
+        toastError(error);
+      }
+    }
+  };
   return (
     <AppBar
       position="static"
@@ -249,6 +263,7 @@ export default function Navbar() {
         <Button
           variant="contained"
           startIcon={<LogoutIcon />}
+          onClick={handleLogout}
           sx={{
             borderRadius: 3,
             px: 3,
