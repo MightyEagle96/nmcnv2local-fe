@@ -9,6 +9,8 @@ import {
   Stack,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { toastError } from "../../../components/ErrorToast";
+import { httpService } from "../../../httpService";
 
 export default function DownloadUpload() {
   const [loading, setLoading] = useState(false);
@@ -19,6 +21,30 @@ export default function DownloadUpload() {
   const fakeDownload = (name: string, delay = 1200) =>
     new Promise((resolve) => setTimeout(() => resolve(`${name} done`), delay));
 
+  const downloadExamination = async () => {
+    try {
+      const { data } = await httpService.get("download/examination");
+
+      toast.success(data);
+      setProgress(20);
+    } catch (error) {
+      throw error;
+      //toastError(error);
+    }
+  };
+
+  const downloadProgrammes = async () => {
+    try {
+      const { data } = await httpService.get("download/programmes");
+
+      toast.success(data);
+      setProgress(40);
+    } catch (error) {
+      throw error;
+      //toastError(error);
+    }
+  };
+
   const handleDownload = async () => {
     setLoading(true);
     setProgress(0);
@@ -26,20 +52,24 @@ export default function DownloadUpload() {
     try {
       // 1. Exams
       setStep("Downloading Examinations...");
-      await fakeDownload("exams");
-      setProgress(25);
-      toast.success("Examinations downloaded successfully");
+      await downloadExamination();
+
+      setStep("Downloading Programmes...");
+      await downloadProgrammes();
+      // await fakeDownload("exams");
+      // setProgress(25);
+      // toast.success("Examinations downloaded successfully");
 
       // 2. Candidates
       setStep("Downloading Candidates...");
       await fakeDownload("candidates");
-      setProgress(50);
+      setProgress(60);
       toast.success("Candidates downloaded successfully");
 
       // 3. Question Bank
       setStep("Downloading Question Banks...");
       await fakeDownload("questions");
-      setProgress(75);
+      setProgress(80);
       toast.success("Question banks downloaded successfully");
 
       // 4. Sessions
@@ -51,7 +81,8 @@ export default function DownloadUpload() {
       setStep("All downloads completed");
       toast.success("Sync completed successfully 🚀");
     } catch (err) {
-      toast.error("Sync failed. Please retry.");
+      toastError(err);
+      // toast.error("Sync failed. Please retry.");
     } finally {
       setLoading(false);
     }

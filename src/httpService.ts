@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const baseURL = import.meta.env.PROD
   ? "/api"
-  : `${window.location.origin.replace("5174", "4001")}/api`;
+  : `${window.location.origin.replace("5173", "4001")}/api`;
 
 console.log(baseURL);
 const httpService = axios.create({
