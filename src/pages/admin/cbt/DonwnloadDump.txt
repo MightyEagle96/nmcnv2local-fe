@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -6,122 +6,76 @@ import {
   Paper,
   Typography,
   LinearProgress,
-  Card,
-  Chip,
-  CardContent,
   Stack,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { toastError } from "../../../components/ErrorToast";
 import { httpService } from "../../../httpService";
 
-type DownloadStatus = "pending" | "loading" | "success" | "error";
-
-interface ISyncStatus {
-  examination: DownloadStatus;
-  programmes: DownloadStatus;
-  questionBanks: DownloadStatus;
-  sessions: DownloadStatus;
-  candidates: DownloadStatus;
-}
-
 export default function DownloadUpload() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState("");
   const [progress, setProgress] = useState(0);
-  const [syncStatus, setSyncStatus] = useState<ISyncStatus>({
-    examination: "pending",
-    programmes: "pending",
-    questionBanks: "pending",
-    sessions: "pending",
-    candidates: "pending",
-  });
-
-  const updateStatus = (key: keyof ISyncStatus, status: DownloadStatus) => {
-    setSyncStatus((prev) => ({
-      ...prev,
-      [key]: status,
-    }));
-  };
 
   // Simulated API call
   // const fakeDownload = (name: string, delay = 1200) =>
   //   new Promise((resolve) => setTimeout(() => resolve(`${name} done`), delay));
 
   const downloadExamination = async () => {
-    updateStatus("examination", "loading");
-
     try {
       const { data } = await httpService.get("download/examination");
-
-      updateStatus("examination", "success");
 
       toast.success(data);
       setProgress(20);
     } catch (error) {
-      updateStatus("examination", "error");
-
       throw error;
       //toastError(error);
     }
   };
 
   const downloadProgrammes = async () => {
-    updateStatus("programmes", "loading");
     try {
       const { data } = await httpService.get("download/programmes");
 
-      updateStatus("programmes", "success");
       toast.success(data);
       setProgress(40);
     } catch (error) {
-      updateStatus("programmes", "error");
       throw error;
       //toastError(error);
     }
   };
 
   const downloadQuestionBanks = async () => {
-    updateStatus("questionBanks", "loading");
     try {
       const { data } = await httpService.get("download/questionbanks");
 
-      updateStatus("questionBanks", "success");
       toast.success(data);
       setProgress(60);
     } catch (error) {
-      updateStatus("questionBanks", "error");
       throw error;
       //toastError(error);
     }
   };
 
   const downloadSessions = async () => {
-    updateStatus("sessions", "loading");
     try {
       const { data } = await httpService.get("download/sessions");
-
-      updateStatus("sessions", "success");
 
       toast.success(data);
       setProgress(80);
     } catch (error) {
-      updateStatus("sessions", "error");
       throw error;
       //toastError(error);
     }
   };
 
   const downloadCandidates = async () => {
-    updateStatus("candidates", "loading");
     try {
       const { data } = await httpService.get("download/candidates");
 
-      updateStatus("candidates", "success");
       toast.success(data);
       setProgress(100);
     } catch (error) {
-      updateStatus("candidates", "error");
       throw error;
       //toastError(error);
     }
@@ -147,6 +101,21 @@ export default function DownloadUpload() {
 
       setStep("Downloading Candidates...");
       await downloadCandidates();
+      // await fakeDownload("exams");
+      // setProgress(25);
+      // toast.success("Examinations downloaded successfully");
+
+      // // 2. Candidates
+      // setStep("Downloading Candidates...");
+      // await fakeDownload("candidates");
+      // setProgress(60);
+      // toast.success("Candidates downloaded successfully");
+
+      // // 4. Sessions
+      // setStep("Downloading Sessions...");
+      // await fakeDownload("sessions");
+      // setProgress(100);
+      //toast.success("Sessions downloaded successfully");
 
       setStep("All downloads completed");
       toast.success("Sync completed successfully 🚀");
@@ -157,22 +126,6 @@ export default function DownloadUpload() {
     }
   };
 
-  const getDownloadSummary = async () => {
-    try {
-      const response = await httpService("/download/summary");
-
-      if (response.data) {
-        console.log(response.data);
-        setSyncStatus(response.data);
-      }
-    } catch (error) {
-      toastError(error);
-    }
-  };
-
-  useEffect(() => {
-    getDownloadSummary();
-  }, []);
   return (
     <Box
       sx={{
@@ -220,20 +173,6 @@ export default function DownloadUpload() {
               {loading ? "Syncing..." : "Start Sync"}
             </Button>
 
-            <Stack spacing={1.5} sx={{ mt: 3 }}>
-              <StatusCard title="Examination" status={syncStatus.examination} />
-
-              <StatusCard title="Programmes" status={syncStatus.programmes} />
-
-              <StatusCard
-                title="Question Banks"
-                status={syncStatus.questionBanks}
-              />
-
-              <StatusCard title="Sessions" status={syncStatus.sessions} />
-
-              <StatusCard title="Candidates" status={syncStatus.candidates} />
-            </Stack>
             {loading && (
               <>
                 <Typography sx={{ fontSize: 14 }}>{step}</Typography>
@@ -253,52 +192,5 @@ export default function DownloadUpload() {
         </Paper>
       </Container>
     </Box>
-  );
-}
-
-function StatusCard({
-  title,
-  status,
-}: {
-  title: string;
-  status: DownloadStatus;
-}) {
-  const color =
-    status === "success"
-      ? "success"
-      : status === "error"
-        ? "error"
-        : status === "loading"
-          ? "warning"
-          : "default";
-
-  return (
-    <Card
-      sx={{
-        bgcolor: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
-    >
-      <CardContent
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          py: 1.5,
-          "&:last-child": {
-            pb: 1.5,
-          },
-        }}
-      >
-        <Typography sx={{ color: "white" }}>{title}</Typography>
-
-        <Chip
-          label={status}
-          color={color}
-          size="small"
-          sx={{ color: "whitesmoke" }}
-        />
-      </CardContent>
-    </Card>
   );
 }
