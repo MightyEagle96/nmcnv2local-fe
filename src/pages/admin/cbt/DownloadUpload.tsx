@@ -45,6 +45,42 @@ export default function DownloadUpload() {
     }
   };
 
+  const downloadQuestionBanks = async () => {
+    try {
+      const { data } = await httpService.get("download/questionbanks");
+
+      toast.success(data);
+      setProgress(60);
+    } catch (error) {
+      throw error;
+      //toastError(error);
+    }
+  };
+
+  const downloadSessions = async () => {
+    try {
+      const { data } = await httpService.get("download/sessions");
+
+      toast.success(data);
+      setProgress(80);
+    } catch (error) {
+      throw error;
+      //toastError(error);
+    }
+  };
+
+  const downloadCandidates = async () => {
+    try {
+      const { data } = await httpService.get("download/candidates");
+
+      toast.success(data);
+      setProgress(100);
+    } catch (error) {
+      throw error;
+      //toastError(error);
+    }
+  };
+
   const handleDownload = async () => {
     setLoading(true);
     setProgress(0);
@@ -56,33 +92,35 @@ export default function DownloadUpload() {
 
       setStep("Downloading Programmes...");
       await downloadProgrammes();
+
+      setStep("Downloading Question banks...");
+      await downloadQuestionBanks();
+
+      setStep("Downloading Sessions...");
+      await downloadSessions();
+
+      setStep("Downloading Candidates...");
+      await downloadCandidates();
       // await fakeDownload("exams");
       // setProgress(25);
       // toast.success("Examinations downloaded successfully");
 
-      // 2. Candidates
-      setStep("Downloading Candidates...");
-      await fakeDownload("candidates");
-      setProgress(60);
-      toast.success("Candidates downloaded successfully");
+      // // 2. Candidates
+      // setStep("Downloading Candidates...");
+      // await fakeDownload("candidates");
+      // setProgress(60);
+      // toast.success("Candidates downloaded successfully");
 
-      // 3. Question Bank
-      setStep("Downloading Question Banks...");
-      await fakeDownload("questions");
-      setProgress(80);
-      toast.success("Question banks downloaded successfully");
-
-      // 4. Sessions
-      setStep("Downloading Sessions...");
-      await fakeDownload("sessions");
-      setProgress(100);
-      toast.success("Sessions downloaded successfully");
+      // // 4. Sessions
+      // setStep("Downloading Sessions...");
+      // await fakeDownload("sessions");
+      // setProgress(100);
+      //toast.success("Sessions downloaded successfully");
 
       setStep("All downloads completed");
       toast.success("Sync completed successfully 🚀");
     } catch (err) {
       toastError(err);
-      // toast.error("Sync failed. Please retry.");
     } finally {
       setLoading(false);
     }
