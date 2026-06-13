@@ -18,8 +18,8 @@ export default function DownloadUpload() {
   const [progress, setProgress] = useState(0);
 
   // Simulated API call
-  const fakeDownload = (name: string, delay = 1200) =>
-    new Promise((resolve) => setTimeout(() => resolve(`${name} done`), delay));
+  // const fakeDownload = (name: string, delay = 1200) =>
+  //   new Promise((resolve) => setTimeout(() => resolve(`${name} done`), delay));
 
   const downloadExamination = async () => {
     try {
