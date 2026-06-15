@@ -21,7 +21,7 @@ const cbtLinks = [
   { label: "Monitor Exam", path: "/admin/cbt/monitorexam" },
   { label: "Manage Exam", path: "/admin/cbt/manageexam" },
   { label: "Download & Upload", path: "/admin/cbt/download&upload" },
-  { label: "Examination History", path: "/admin/cbt/examinationhistory" },
+  { label: "Examinations", path: "/admin/cbt/examinations" },
 ];
 
 const caosceLinks = [
