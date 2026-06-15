@@ -1,6 +1,4 @@
 import { Typography } from "@mui/material";
-import React from "react";
-
 function Examinations() {
   return (
     <div className="bg-light py-5">
