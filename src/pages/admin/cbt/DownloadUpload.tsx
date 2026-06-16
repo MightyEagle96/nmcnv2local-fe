@@ -14,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 import { toastError } from "../../../components/ErrorToast";
 import { httpService } from "../../../httpService";
+import { useNavigate } from "react-router-dom";
 
 type DownloadStatus = "pending" | "loading" | "success" | "error";
 
@@ -47,6 +48,8 @@ export default function DownloadUpload() {
   // Simulated API call
   // const fakeDownload = (name: string, delay = 1200) =>
   //   new Promise((resolve) => setTimeout(() => resolve(`${name} done`), delay));
+
+  const navigate = useNavigate();
 
   const downloadExamination = async () => {
     updateStatus("examination", "loading");
@@ -150,6 +153,10 @@ export default function DownloadUpload() {
 
       setStep("All downloads completed");
       toast.success("Sync completed successfully 🚀");
+
+      setTimeout(() => {
+        navigate("/admin/cbt/examinations");
+      }, 1500);
     } catch (err) {
       toastError(err);
     } finally {

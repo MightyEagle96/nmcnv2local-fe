@@ -13,6 +13,14 @@ import { Login, Person } from "@mui/icons-material";
 
 function LoginPage() {
   const [mounted, setMounted] = useState(false);
+  const [examinationNumber, setExaminationNumber] = useState("");
+
+  const loginCandidate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log({ examinationNumber });
+    // window.location.assign(`/candidates/${examinationNumber}`);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -79,6 +87,7 @@ function LoginPage() {
           </Typography>
 
           <Box
+            onSubmit={loginCandidate}
             component="form"
             sx={{
               display: "flex",
@@ -90,6 +99,7 @@ function LoginPage() {
               fullWidth
               label="Examination Number"
               placeholder="Enter Examination number"
+              onChange={(e) => setExaminationNumber(e.target.value)}
               slotProps={{
                 input: {
                   startAdornment: (
