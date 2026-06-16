@@ -3,6 +3,8 @@ import { httpService } from "../../../httpService";
 import { useEffect, useState } from "react";
 import { Modal, Table } from "react-bootstrap";
 import { Clear, Done, Pending, Upload } from "@mui/icons-material";
+import { toastError } from "../../../components/ErrorToast";
+import { toast } from "react-toastify";
 
 type status = "not started" | "activated" | "completed" | "uploaded";
 interface Session {
@@ -10,6 +12,7 @@ interface Session {
   sessionName: string;
   sessionCode: string;
   sessionNumber: number;
+  cbtExamination: string;
   status: status;
 }
 
@@ -27,6 +30,8 @@ type TestDriveList = TestDrive[];
 function Examinations() {
   const [examinations, setExaminations] = useState<TestDriveList>();
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [scheduledTime, setScheduledTime] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const getData = async () => {
     try {
       const { data } = await httpService("examination/viewlist");
@@ -37,7 +42,7 @@ function Examinations() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [refresh]);
 
   function SwitchStatus(status: status) {
     switch (status) {
@@ -54,14 +59,32 @@ function Examinations() {
     }
   }
 
-  const renderActionButton = (session: Session) => {
+  const activateSession = async (session: Session) => {
+    try {
+      const { data } = await httpService.patch("examination/activatesession", {
+        _id: session._id,
+        cbtExamination: session.cbtExamination,
+      });
+
+      if (data) {
+        setRefresh(!refresh);
+        setSessions([]);
+        toast.success(data);
+      }
+    } catch (error) {
+      toastError(error);
+    }
+    console.log(session);
+  };
+  const renderActionButton = (session: Session, scheduledTime: string) => {
     switch (session.status) {
       case "not started":
         return (
           <Button
             variant="contained"
             color="warning"
-            //onClick={() => activateSession(session)}
+            disabled={new Date(scheduledTime).getTime() >= new Date().getTime()}
+            onClick={() => activateSession(session)}
           >
             Activate
           </Button>
@@ -144,7 +167,12 @@ function Examinations() {
                   <td>
                     {examination.activatedSessionNumber}
 
-                    <Button onClick={() => setSessions(examination.sessions)}>
+                    <Button
+                      onClick={() => {
+                        setSessions(examination.sessions);
+                        setScheduledTime(examination.scheduledTime);
+                      }}
+                    >
                       view session details
                     </Button>
                   </td>
@@ -159,6 +187,7 @@ function Examinations() {
         onHide={() => setSessions([])}
         centered
         size="lg"
+        backdrop="static"
       >
         <Modal.Header closeButton>
           <Modal.Title>Examination Sessions</Modal.Title>
@@ -181,7 +210,7 @@ function Examinations() {
                   <td>{session.sessionName}</td>
                   <td>{session.sessionCode}</td>
                   <td>{SwitchStatus(session.status)}</td>
-                  <td>{renderActionButton(session)}</td>
+                  <td>{renderActionButton(session, scheduledTime)}</td>
                 </tr>
               ))}
             </tbody>

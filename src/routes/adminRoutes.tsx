@@ -6,6 +6,7 @@ import type { User } from "../context/AppUserContext";
 import CbtDashboard from "../pages/admin/cbt/CbtDashboard";
 import DownloadUpload from "../pages/admin/cbt/DownloadUpload";
 import Examinations from "../pages/admin/cbt/Examinations";
+import MonitorExam from "../pages/admin/cbt/MonitorExam";
 
 const publicAdminRoutes = [{ path: "/", component: <LoginPage /> }];
 
@@ -14,6 +15,7 @@ const privateAdminRoutes = [
   { path: "/cbt", component: <CbtDashboard /> },
   { path: "/cbt/download&upload", component: <DownloadUpload /> },
   { path: "/cbt/examinations", component: <Examinations /> },
+  { path: "/cbt/monitorexam", component: <MonitorExam /> },
 ];
 
 function AdminPublicRoutes() {
