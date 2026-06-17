@@ -47,13 +47,41 @@ function Examinations() {
   function SwitchStatus(status: status) {
     switch (status) {
       case "not started":
-        return <Chip icon={<Clear />} label={status} color="error" />;
+        return (
+          <Chip
+            icon={<Clear />}
+            label={status}
+            color="error"
+            sx={{ textTransform: "uppercase" }}
+          />
+        );
       case "activated":
-        return <Chip icon={<Pending />} label={status} color="warning" />;
+        return (
+          <Chip
+            icon={<Pending />}
+            label={status}
+            color="warning"
+            sx={{ textTransform: "uppercase" }}
+          />
+        );
       case "completed":
-        return <Chip icon={<Done />} label={status} color="primary" />;
+        return (
+          <Chip
+            icon={<Done />}
+            label={status}
+            color="primary"
+            sx={{ textTransform: "uppercase" }}
+          />
+        );
       case "uploaded":
-        return <Chip icon={<Upload />} label={status} color="success" />;
+        return (
+          <Chip
+            icon={<Upload />}
+            label={status}
+            color="success"
+            sx={{ textTransform: "uppercase" }}
+          />
+        );
       default:
         return <Chip label={status} />;
     }
@@ -81,7 +109,7 @@ function Examinations() {
       case "not started":
         return (
           <Button
-            variant="contained"
+            //  variant="contained"
             color="warning"
             disabled={new Date(scheduledTime).getTime() >= new Date().getTime()}
             onClick={() => activateSession(session)}
@@ -93,7 +121,7 @@ function Examinations() {
       case "activated":
         return (
           <Button
-            variant="contained"
+            // variant="contained"
             color="error"
             //onClick={() => endSession(session)}
           >
@@ -104,7 +132,7 @@ function Examinations() {
       case "completed":
         return (
           <Button
-            variant="contained"
+            // variant="contained"
             color="success"
             // onClick={() => uploadSession(session)}
           >
