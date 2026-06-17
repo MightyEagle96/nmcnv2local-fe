@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 
 import { Login, Person } from "@mui/icons-material";
+import { httpService } from "../../httpService";
+import { toastError } from "../../components/ErrorToast";
 
 function LoginPage() {
   const [mounted, setMounted] = useState(false);
@@ -18,6 +20,17 @@ function LoginPage() {
   const loginCandidate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    try {
+      const { data } = await httpService.post(`cbt/prelogin`, {
+        indexNumber: examinationNumber,
+      });
+
+      if (data) {
+        console.log(data);
+      }
+    } catch (error) {
+      toastError(error);
+    }
     console.log({ examinationNumber });
     // window.location.assign(`/candidates/${examinationNumber}`);
   };

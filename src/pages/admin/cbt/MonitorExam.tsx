@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toastError } from "../../../components/ErrorToast";
 import { httpService } from "../../../httpService";
 import { Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 
 interface Examination {
   _id: string;
@@ -40,6 +41,8 @@ function MonitorExam() {
   const [examinationSession, setExaminationSession] = useState<Session | null>(
     null,
   );
+
+  const [candidates, setCandidates] = useState([]);
   const getActiveSession = async () => {
     try {
       const { data } = await httpService.get("examination/activesession");
@@ -54,6 +57,9 @@ function MonitorExam() {
   useEffect(() => {
     getActiveSession();
   }, []);
+
+  const columns = [{ field: "id", headerName: "ID", width: 100 }];
+
   return (
     <div className="p-3">
       {examinationSession ? (
@@ -69,6 +75,9 @@ function MonitorExam() {
               {examinationSession.examination.name} (
               {examinationSession.sessionName})
             </Typography>
+          </div>
+          <div className=" my-3">
+            <DataGrid rows={candidates} columns={columns} />
           </div>
         </>
       ) : (
