@@ -84,6 +84,8 @@ function LoginPage() {
           candidate: candidate?._id,
         },
       });
+
+      console.log(response.data);
     } catch (error) {
       toastError(error);
     }
