@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { toastError } from "../../../components/ErrorToast";
 import { httpService } from "../../../httpService";
-import { Typography } from "@mui/material";
-import { DataGrid, renderActionsCell } from "@mui/x-data-grid";
+import { Stack, Typography, Box, Paper } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { Clear, Done } from "@mui/icons-material";
+import { CheckCheck, Pen, ShieldAlert, Users } from "lucide-react";
 
 interface Examination {
   _id: string;
@@ -74,7 +75,7 @@ function MonitorExam() {
       );
 
       setCandidates(data.candidates);
-      setCandidatesCount(data.candidatesCount);
+      setCandidatesCount(data.totalCandidates);
       console.log(data);
     } catch (error) {}
   };
@@ -157,10 +158,38 @@ function MonitorExam() {
             <Clear sx={{ color: "red" }} />
           )}
         </span>
-        // <span className="text-uppercase">
-        //   {params.row.loggedInTime ? params.row.loggedInTime : "-"}
-        // </span>
       ),
+    },
+  ];
+
+  const stats = [
+    {
+      title: "Candidates",
+      value: candidatesCount,
+      icon: Users,
+      bg: "#E3F2FD",
+      color: "#1976D2",
+    },
+    {
+      title: "Writing",
+      value: candidatesCount,
+      icon: Pen,
+      bg: "#FFF3E0",
+      color: "#F57C00",
+    },
+    {
+      title: "Submitted",
+      value: candidatesCount,
+      icon: CheckCheck,
+      bg: "#E8F5E9",
+      color: "#2E7D32",
+    },
+    {
+      title: "Infractions",
+      value: candidatesCount,
+      icon: ShieldAlert,
+      bg: "#FFEBEE",
+      color: "#D32F2F",
     },
   ];
 
@@ -168,17 +197,91 @@ function MonitorExam() {
     <div className="p-3">
       {examinationSession ? (
         <>
-          <div className="bg-light p-3 text-center">
-            <Typography variant="overline" sx={{ color: "primary" }}>
-              active session
+          <Paper
+            elevation={1}
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              textAlign: "center",
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="overline"
+              color="primary"
+              sx={{
+                letterSpacing: 2,
+                fontWeight: 700,
+              }}
+            >
+              ACTIVE SESSION
             </Typography>
+
             <Typography
               variant="h5"
-              sx={{ fontWeight: 800, textTransform: "uppercase" }}
+              sx={{
+                fontWeight: 800,
+                textTransform: "uppercase",
+                mt: 0.5,
+              }}
             >
-              {examinationSession.examination.name} (
-              {examinationSession.sessionName})
+              {examinationSession.examination.name}
             </Typography>
+
+            <Typography variant="body2" color="text.secondary">
+              {examinationSession.sessionName}
+            </Typography>
+          </Paper>
+          <div className="my-3">
+            <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+
+                return (
+                  <Paper
+                    key={stat.title}
+                    elevation={1}
+                    sx={{
+                      flex: 1,
+                      p: 2,
+                      borderRadius: 3,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      transition: "0.2s",
+                      "&:hover": {
+                        transform: "translateY(-2px)",
+                        boxShadow: 4,
+                      },
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {stat.title}
+                      </Typography>
+
+                      <Typography variant="h4" fontWeight={700}>
+                        {stat.value}
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: "50%",
+                        backgroundColor: stat.bg,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Icon size={24} color={stat.color} />
+                    </Box>
+                  </Paper>
+                );
+              })}
+            </Stack>
           </div>
           <div
             className=" my-3"

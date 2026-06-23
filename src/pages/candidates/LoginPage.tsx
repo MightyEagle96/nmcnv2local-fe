@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import {
   Box,
   Button,
@@ -7,15 +7,41 @@ import {
   TextField,
   Typography,
   Fade,
+  Dialog,
+  Slide,
+  DialogTitle,
+  Alert,
+  DialogContent,
+  Avatar,
+  DialogActions,
 } from "@mui/material";
+
+import type { TransitionProps } from "@mui/material/transitions";
 
 import { Login, Person } from "@mui/icons-material";
 import { httpService } from "../../httpService";
 import { toastError } from "../../components/ErrorToast";
+import { User, ShieldCheck } from "lucide-react";
+import { base64ToBlobUrl } from "../../assets/imageToBlob";
 
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+type Candidate = {
+  name: string;
+  indexNumber: string;
+  programmes: { name: string; code: string }[];
+};
 function LoginPage() {
   const [mounted, setMounted] = useState(false);
   const [examinationNumber, setExaminationNumber] = useState("");
+  const [candidate, setCandidate] = useState<Candidate | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   const loginCandidate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,6 +52,13 @@ function LoginPage() {
       });
 
       if (data) {
+        const { avatar, ...rest } = data;
+        setCandidate(rest);
+
+        if (avatar) {
+          const blobUrl = base64ToBlobUrl(avatar, "image/jpeg");
+          if (blobUrl) setImageUrl(blobUrl);
+        }
         console.log(data);
       }
     } catch (error) {
@@ -38,6 +71,12 @@ function LoginPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleClose = () => {
+    setCandidate(null);
+  };
+
+  const handleProceed = () => {};
 
   return (
     <Box
@@ -130,6 +169,7 @@ function LoginPage() {
               variant="contained"
               color="success"
               endIcon={<Login />}
+              type="submit"
               sx={{
                 py: 1.7,
                 borderRadius: 3,
@@ -148,6 +188,117 @@ function LoginPage() {
           </Box>
         </Paper>
       </Fade>
+      <Dialog
+        fullWidth
+        maxWidth="md"
+        open={candidate !== null}
+        slots={{ transition: Transition }}
+        keepMounted
+        onClose={handleClose}
+        // aria-describedby="alert-dialog-slide-description"
+        role="alertdialog"
+      >
+        <DialogTitle sx={{ textAlign: "center", pb: 0 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            Verify Your Identity
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary">
+            Please confirm that the details below belong to you before
+            proceeding.
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              my: 3,
+            }}
+          >
+            <Avatar
+              src={imageUrl}
+              sx={{
+                width: 160,
+                height: 160,
+                border: "4px solid",
+                borderColor: "primary.main",
+                boxShadow: 3,
+              }}
+            >
+              <User size={80} />
+            </Avatar>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              mb: 2,
+            }}
+          >
+            <ShieldCheck size={40} color="#2e7d32" />
+          </Box>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              border: "1px solid",
+              borderColor: "divider",
+              mb: 2,
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Full Name
+            </Typography>
+
+            <Typography
+              variant="h6"
+              sx={{
+                textTransform: "capitalize",
+                fontWeight: 700,
+              }}
+              // fontWeight={700}
+              // textTransform="capitalize"
+            >
+              {candidate?.name}
+            </Typography>
+          </Box>
+          <div className="p-3 bg-light rounded my-2">
+            <Typography variant="caption">Examination Number:</Typography>
+            <Typography
+              variant="h5"
+              sx={{ textTransform: "uppercase", fontWeight: 700 }}
+            >
+              {candidate?.indexNumber}
+            </Typography>
+          </div>
+          <div className="p-3 bg-light rounded my-2">
+            <Typography variant="caption">
+              {candidate?.programmes.length > 1 ? "Programmes" : "Programme"}:
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{ textTransform: "uppercase", fontWeight: 700 }}
+            >
+              {candidate?.programmes.map((p) => p.name).join(", ")}
+            </Typography>
+          </div>
+
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            If these details are incorrect, do not continue. Contact the
+            examination administrator immediately.
+          </Alert>
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}>
+          <Button variant="outlined" color="inherit" onClick={handleClose}>
+            Not My Details
+          </Button>
+
+          <Button variant="contained" onClick={handleProceed}>
+            Proceed to Login
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
