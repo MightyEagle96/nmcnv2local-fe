@@ -21,7 +21,7 @@ import type { TransitionProps } from "@mui/material/transitions";
 import { Login, Person } from "@mui/icons-material";
 import { httpService } from "../../httpService";
 import { toastError } from "../../components/ErrorToast";
-import { User, ShieldCheck } from "lucide-react";
+import { User } from "lucide-react";
 import { base64ToBlobUrl } from "../../assets/imageToBlob";
 
 const Transition = forwardRef(function Transition(
@@ -298,7 +298,10 @@ function LoginPage() {
               }}
             >
               <Typography variant="caption" color="text.secondary">
-                {candidate?.programmes?.length > 1 ? "Programmes" : "Programme"}
+                {candidate?.programmes.length &&
+                candidate?.programmes?.length > 1
+                  ? "Programmes"
+                  : "Programme"}
               </Typography>
 
               <Typography
