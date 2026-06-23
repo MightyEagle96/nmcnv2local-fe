@@ -33,6 +33,7 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 type Candidate = {
+  _id: string;
   name: string;
   indexNumber: string;
   programmes: { name: string; code: string }[];
@@ -76,7 +77,17 @@ function LoginPage() {
     setCandidate(null);
   };
 
-  const handleProceed = () => {};
+  const handleProceed = async () => {
+    try {
+      const response = await httpService.get(`cbt/login`, {
+        params: {
+          candidate: candidate?._id,
+        },
+      });
+    } catch (error) {
+      toastError(error);
+    }
+  };
 
   return (
     <Box
@@ -326,11 +337,11 @@ function LoginPage() {
           </Alert>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
-          <Button variant="outlined" color="success" onClick={handleClose}>
+          <Button variant="contained" color="error" onClick={handleClose}>
             Not My Details
           </Button>
 
-          <Button variant="contained" color="success" onClick={handleProceed}>
+          <Button variant="outlined" color="success" onClick={handleProceed}>
             Proceed to Login
           </Button>
         </DialogActions>
