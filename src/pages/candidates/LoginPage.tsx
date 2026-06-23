@@ -229,82 +229,92 @@ function LoginPage() {
               <User size={80} />
             </Avatar>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              mb: 2,
-            }}
-          >
-            <ShieldCheck size={40} color="#2e7d32" />
-          </Box>
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              border: "1px solid",
-              borderColor: "divider",
-              mb: 2,
-            }}
-          >
-            <Typography variant="caption" color="text.secondary">
-              Full Name
-            </Typography>
 
-            <Typography
-              variant="h6"
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "1fr 1fr",
+              },
+              gap: 1,
+              mb: 2,
+            }}
+          >
+            {/* Candidate Info Card */}
+            <Box
               sx={{
+                p: 1.5,
+                borderRadius: 2,
+                border: "1px solid",
+                borderColor: "divider",
+                textWrap: "wrap",
+                textBoxTrim: "ellipsis",
+                mb: 1,
                 textTransform: "capitalize",
-                fontWeight: 700,
+                overflowWrap: "anywhere",
+                wordBreak: "break-word",
               }}
             >
-              {candidate?.name}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              border: "1px solid",
-              borderColor: "divider",
-              mb: 2,
-            }}
-          >
-            <Typography variant="caption" color="text.secondary">
-              Examination Number
-            </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Full Name
+              </Typography>
 
-            <Typography
-              variant="h6"
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 700, textTransform: "capitalize" }}
+              >
+                {candidate?.name}
+              </Typography>
+            </Box>
+
+            <Box
               sx={{
-                textTransform: "uppercase",
-                fontWeight: 700,
+                p: 1.5,
+                borderRadius: 2,
+                border: "1px solid",
+                borderColor: "divider",
+                mb: 1,
               }}
             >
-              {candidate?.indexNumber}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              border: "1px solid",
-              borderColor: "divider",
-              mb: 2,
-            }}
-          >
-            <Typography variant="caption">
-              {candidate?.programmes.length && candidate?.programmes.length > 1
-                ? "Programmes"
-                : "Programme"}
-              :
-            </Typography>
-            <Typography
-              variant="h5"
-              sx={{ textTransform: "uppercase", fontWeight: 700 }}
+              <Typography variant="caption" color="text.secondary">
+                Examination Number
+              </Typography>
+
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 700, textTransform: "uppercase" }}
+              >
+                {candidate?.indexNumber}
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                p: 1.5,
+                borderRadius: 2,
+                border: "1px solid",
+                borderColor: "divider",
+              }}
             >
-              {candidate?.programmes.map((p) => p.name).join(", ")}
-            </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {candidate?.programmes?.length > 1 ? "Programmes" : "Programme"}
+              </Typography>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}
+              >
+                {candidate?.programmes.map((p) => p.name).join(", ")}
+              </Typography>
+            </Box>
           </Box>
 
           <Alert severity="warning" sx={{ mb: 2 }}>
