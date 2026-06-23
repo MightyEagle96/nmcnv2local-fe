@@ -257,24 +257,47 @@ function LoginPage() {
                 textTransform: "capitalize",
                 fontWeight: 700,
               }}
-              // fontWeight={700}
-              // textTransform="capitalize"
             >
               {candidate?.name}
             </Typography>
           </Box>
-          <div className="p-3 bg-light rounded my-2">
-            <Typography variant="caption">Examination Number:</Typography>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              border: "1px solid",
+              borderColor: "divider",
+              mb: 2,
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Examination Number
+            </Typography>
+
             <Typography
-              variant="h5"
-              sx={{ textTransform: "uppercase", fontWeight: 700 }}
+              variant="h6"
+              sx={{
+                textTransform: "uppercase",
+                fontWeight: 700,
+              }}
             >
               {candidate?.indexNumber}
             </Typography>
-          </div>
-          <div className="p-3 bg-light rounded my-2">
+          </Box>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              border: "1px solid",
+              borderColor: "divider",
+              mb: 2,
+            }}
+          >
             <Typography variant="caption">
-              {candidate?.programmes.length > 1 ? "Programmes" : "Programme"}:
+              {candidate?.programmes.length && candidate?.programmes.length > 1
+                ? "Programmes"
+                : "Programme"}
+              :
             </Typography>
             <Typography
               variant="h5"
@@ -282,7 +305,7 @@ function LoginPage() {
             >
               {candidate?.programmes.map((p) => p.name).join(", ")}
             </Typography>
-          </div>
+          </Box>
 
           <Alert severity="warning" sx={{ mb: 2 }}>
             If these details are incorrect, do not continue. Contact the
@@ -290,11 +313,11 @@ function LoginPage() {
           </Alert>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
-          <Button variant="outlined" color="inherit" onClick={handleClose}>
+          <Button variant="outlined" color="success" onClick={handleClose}>
             Not My Details
           </Button>
 
-          <Button variant="contained" onClick={handleProceed}>
+          <Button variant="contained" color="success" onClick={handleProceed}>
             Proceed to Login
           </Button>
         </DialogActions>
