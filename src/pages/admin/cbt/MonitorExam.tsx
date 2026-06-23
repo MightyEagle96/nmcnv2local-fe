@@ -260,7 +260,7 @@ function MonitorExam() {
                         {stat.title}
                       </Typography>
 
-                      <Typography variant="h4" fontWeight={700}>
+                      <Typography variant="h4" sx={{ fontWeight: 700 }}>
                         {stat.value}
                       </Typography>
                     </Box>
