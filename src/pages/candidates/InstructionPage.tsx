@@ -60,12 +60,17 @@ function InstructionPage() {
             <tbody>
               <tr>
                 <th style={{ width: "30%" }}>Examination</th>
-                <td>{summary?.examination.name}</td>
+                <td className="text-capitalize">{summary?.examination.name}</td>
               </tr>
 
               <tr>
                 <th>Duration</th>
                 <td>{summary?.duration} Minutes</td>
+              </tr>
+
+              <tr>
+                <th>Papers</th>
+                <td>{summary?.questionBanks.length}</td>
               </tr>
 
               <tr>
