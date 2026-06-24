@@ -3,11 +3,16 @@ import LoginPage from "../pages/questionStation/LoginPage";
 import QuestionStationDashboard from "../pages/questionStation/QuestionStationDashboard";
 import type { User } from "../context/AppUserContext";
 import { appRoles } from "./AppRouter";
+import NotFoundPage from "../pages/common/NotFoundPage";
 
-const publicRoutes = [{ path: "/", component: <LoginPage /> }];
+const publicRoutes = [
+  { path: "/", component: <LoginPage /> },
+  { path: "*", component: <NotFoundPage /> },
+];
 
 export const privateRoutes = [
   { path: "/", component: <QuestionStationDashboard /> },
+  { path: "*", component: <NotFoundPage /> },
 ];
 function PublicRoutes() {
   return (

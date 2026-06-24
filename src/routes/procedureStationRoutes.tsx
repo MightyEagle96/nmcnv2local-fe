@@ -3,9 +3,16 @@ import LoginPage from "../pages/procedureStation/LoginPage";
 import ProcedureStationDashboard from "../pages/procedureStation/ProcedureStationDashboard";
 import { appRoles } from "./AppRouter";
 import type { User } from "../context/AppUserContext";
+import NotFoundPage from "../pages/common/NotFoundPage";
 
-const publicRoutes = [{ path: "/", component: <LoginPage /> }];
-const privateRoutes = [{ path: "/", component: <ProcedureStationDashboard /> }];
+const publicRoutes = [
+  { path: "/", component: <LoginPage /> },
+  { path: "*", component: <NotFoundPage /> },
+];
+const privateRoutes = [
+  { path: "/", component: <ProcedureStationDashboard /> },
+  { path: "*", component: <NotFoundPage /> },
+];
 function PublicRoutes() {
   return (
     <Routes>

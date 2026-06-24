@@ -7,8 +7,12 @@ import CbtDashboard from "../pages/admin/cbt/CbtDashboard";
 import DownloadUpload from "../pages/admin/cbt/DownloadUpload";
 import Examinations from "../pages/admin/cbt/Examinations";
 import MonitorExam from "../pages/admin/cbt/MonitorExam";
+import NotFoundPage from "../pages/common/NotFoundPage";
 
-const publicAdminRoutes = [{ path: "/", component: <LoginPage /> }];
+const publicAdminRoutes = [
+  { path: "/", component: <LoginPage /> },
+  { path: "*", component: <NotFoundPage /> },
+];
 
 const privateAdminRoutes = [
   { path: "/", component: <AdminDashboard /> },
@@ -16,6 +20,7 @@ const privateAdminRoutes = [
   { path: "/cbt/download&upload", component: <DownloadUpload /> },
   { path: "/cbt/examinations", component: <Examinations /> },
   { path: "/cbt/monitorexam", component: <MonitorExam /> },
+  { path: "*", component: <NotFoundPage /> },
 ];
 
 function AdminPublicRoutes() {

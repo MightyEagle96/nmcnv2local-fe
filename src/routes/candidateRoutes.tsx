@@ -3,11 +3,16 @@ import CandidateExamPage from "../pages/candidates/CandidateExamPage";
 import LoginPage from "../pages/candidates/LoginPage";
 import { Route, Routes } from "react-router-dom";
 import { appRoles } from "./AppRouter";
+import NotFoundPage from "../pages/common/NotFoundPage";
 
-const publicRoutes = [{ path: "/", component: <LoginPage /> }];
+const publicRoutes = [
+  { path: "/", component: <LoginPage /> },
+  { path: "*", component: <NotFoundPage /> },
+];
 
 export const privateCandidateRoutes = [
   { path: "/", component: <CandidateExamPage /> },
+  { path: "*", component: <NotFoundPage /> },
 ];
 
 function CandidatePublicRoutes() {
