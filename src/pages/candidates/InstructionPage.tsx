@@ -4,6 +4,7 @@ import { Checkbox, FormControlLabel } from "@mui/material";
 import { toastError } from "../../components/ErrorToast";
 import { httpService } from "../../httpService";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export interface ExamState {
   examination: {
@@ -41,6 +42,8 @@ function InstructionPage() {
   useEffect(() => {
     getData();
   }, []);
+
+  const navigate = useNavigate();
 
   return (
     <div className="container py-5">
@@ -150,7 +153,12 @@ function InstructionPage() {
         </div>
 
         <div className="card-footer d-flex justify-content-between">
-          <Button variant="contained" color="success" disabled={!accepted}>
+          <Button
+            onClick={() => navigate("/")}
+            variant="contained"
+            color="success"
+            disabled={!accepted}
+          >
             Start Examination
           </Button>
         </div>
