@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import LoginPage from "../pages/admin/LoginPage";
+import AdminLoginPage from "../pages/admin/AdminLoginPage";
 import { appRoles } from "./AppRouter";
 import type { User } from "../context/AppUserContext";
 import CbtDashboard from "../pages/admin/cbt/CbtDashboard";
@@ -8,9 +8,10 @@ import DownloadUpload from "../pages/admin/cbt/DownloadUpload";
 import Examinations from "../pages/admin/cbt/Examinations";
 import MonitorExam from "../pages/admin/cbt/MonitorExam";
 import NotFoundPage from "../pages/common/NotFoundPage";
+import UnauthorizedPage from "../pages/common/UnauthorizedPage";
 
 const publicAdminRoutes = [
-  { path: "/", component: <LoginPage /> },
+  { path: "/", component: <AdminLoginPage /> },
   { path: "*", component: <NotFoundPage /> },
 ];
 
@@ -44,6 +45,9 @@ function AdminPrivateRoutes() {
 }
 
 export function AdminRoutes({ user }: { user: User | null }) {
+  if (user && user.role !== appRoles.admin) {
+    return <UnauthorizedPage />;
+  }
   if (user && user.role === appRoles.admin) {
     return <AdminPrivateRoutes />;
   }

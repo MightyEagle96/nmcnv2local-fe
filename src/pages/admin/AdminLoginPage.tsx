@@ -21,7 +21,7 @@ import { toastError } from "../../components/ErrorToast";
 import { httpService } from "../../httpService";
 import { toast } from "react-toastify";
 
-function LoginPage() {
+function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [userData, setUserData] = useState({});
@@ -192,4 +192,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default AdminLoginPage;

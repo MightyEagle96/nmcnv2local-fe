@@ -4,6 +4,7 @@ import LoginPage from "../pages/candidates/LoginPage";
 import { Route, Routes } from "react-router-dom";
 import { appRoles } from "./AppRouter";
 import NotFoundPage from "../pages/common/NotFoundPage";
+import UnauthorizedPage from "../pages/common/UnauthorizedPage";
 
 const publicRoutes = [
   { path: "/", component: <LoginPage /> },
@@ -36,6 +37,10 @@ function CandidatePrivateRoutes() {
 }
 
 export function CandidateRoutes({ user }: { user: User | null }) {
+  if (user && user.role !== appRoles.candidate) {
+    return <UnauthorizedPage />;
+  }
+
   if (user && user.role === appRoles.candidate) {
     return <CandidatePrivateRoutes />;
   }

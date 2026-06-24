@@ -12,6 +12,7 @@ export const RoleGuard = ({
   element: JSX.Element;
 }) => {
   if (!user) {
+    console.log("user is null");
     return <Navigate to={"/"} replace />;
   }
 
