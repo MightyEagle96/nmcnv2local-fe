@@ -85,6 +85,8 @@ function LoginPage() {
         },
       });
 
+      window.location.assign(`/instructions`);
+
       console.log(response.data);
     } catch (error) {
       toastError(error);

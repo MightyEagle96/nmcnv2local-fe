@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { appRoles } from "./AppRouter";
 import NotFoundPage from "../pages/common/NotFoundPage";
 import UnauthorizedPage from "../pages/common/UnauthorizedPage";
+import InstructionPage from "../pages/candidates/InstructionPage";
 
 const publicRoutes = [
   { path: "/", component: <LoginPage /> },
@@ -13,6 +14,7 @@ const publicRoutes = [
 
 export const privateCandidateRoutes = [
   { path: "/", component: <CandidateExamPage /> },
+  { path: "/instructions", component: <InstructionPage /> },
   { path: "*", component: <NotFoundPage /> },
 ];
 
