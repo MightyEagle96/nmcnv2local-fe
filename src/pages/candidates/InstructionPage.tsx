@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 import { toastError } from "../../components/ErrorToast";
 import { httpService } from "../../httpService";
+import { Button } from "@mui/material";
 
 export interface ExamState {
   examination: {
@@ -44,12 +45,12 @@ function InstructionPage() {
   return (
     <div className="container py-5">
       <div className="card shadow border-0">
-        <div className="card-header bg-primary text-white">
+        <div className="card-header bg-success text-white">
           <h3 className="mb-0">Examination Instructions</h3>
         </div>
 
         <div className="card-body">
-          <div className="alert alert-warning">
+          <div className="alert alert-warning border-0">
             <strong>Important:</strong> Please read all instructions carefully
             before proceeding.
           </div>
@@ -130,36 +131,28 @@ function InstructionPage() {
             </li>
           </ol>
 
-          <div className="alert alert-danger mt-4">
+          <div className="alert alert-danger mt-4 border-0">
             <strong>Warning:</strong> Multiple login attempts, impersonation,
             unauthorized access, or any form of examination misconduct may
             result in immediate termination of your session.
           </div>
 
-          <div className="form-check mt-4">
-            <input
-              id="acceptInstructions"
-              type="checkbox"
-              className="form-check-input"
-              checked={accepted}
-              onChange={(e) => setAccepted(e.target.checked)}
-            />
-
-            <label htmlFor="acceptInstructions" className="form-check-label">
-              I have read and understood the examination instructions and agree
-              to comply with all examination rules.
-            </label>
-          </div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={accepted}
+                onChange={(e) => setAccepted(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="I have read and understood the examination instructions and agree to comply with all examination rules."
+          />
         </div>
 
         <div className="card-footer d-flex justify-content-between">
-          <Link to="/cbt/dashboard" className="btn btn-outline-secondary">
-            Back
-          </Link>
-
-          <button className="btn btn-success" disabled={!accepted}>
+          <Button variant="contained" color="success" disabled={!accepted}>
             Start Examination
-          </button>
+          </Button>
         </div>
       </div>
     </div>
