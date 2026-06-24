@@ -23,8 +23,6 @@ export default function AppRouter() {
     return <LoadingPage />;
   }
 
-  console.log(user);
-
   return (
     <BrowserRouter>
       {user && user.role === appRoles.admin && <Navbar />}
