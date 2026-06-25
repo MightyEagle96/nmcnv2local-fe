@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useAppUser } from "../../context/AppUserContext";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
 import { useActiveProgramme } from "../../context/ActiveProgrammeContext";
 import { toastError } from "../../components/ErrorToast";
 import { httpService } from "../../httpService";
@@ -117,26 +126,105 @@ function QuestionsDisplay() {
             />
           </Box>
           <Box>
-            <div
-              className="p-3 bg-light"
-              style={{ maxHeight: "30vh", overflow: "scroll" }}
-            >
-              {questionBanks[activeProgramme?.index]?.questions.map((p, i) => (
-                <Button
-                  key={p.questionId}
-                  onClick={() => handleQuestionChange(i)}
-                  size="small"
-                  variant={
-                    questionBanks[activeProgramme?.index]?.questionIndex === i
-                      ? "contained"
-                      : "outlined"
-                  }
-                  sx={{ mr: 1, mb: 1 }}
-                >
-                  {i + 1}
-                </Button>
-              ))}
-            </div>
+            <FormControl fullWidth>
+              <RadioGroup
+              // value={selectedAnswer}
+              // onChange={handleAnswerChange}
+              >
+                {questionBanks[activeProgramme?.index]?.questions[
+                  questionBanks[activeProgramme?.index]?.questionIndex
+                ]?.options.map((option, index) => {
+                  const optionLetter = String.fromCharCode(65 + index);
+
+                  return (
+                    <Box
+                      key={index}
+                      sx={{
+                        mb: 2,
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 2,
+                        px: 2,
+                        py: 1,
+                        transition: "all 0.2s ease",
+                        "&:hover": {
+                          borderColor: "primary.main",
+                          backgroundColor: "action.hover",
+                        },
+                      }}
+                    >
+                      <FormControlLabel
+                        value={option}
+                        control={<Radio />}
+                        sx={{
+                          width: "100%",
+                          alignItems: "flex-start",
+                          m: 0,
+                        }}
+                        label={
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: 2,
+                              width: "100%",
+                              py: 0.5,
+                            }}
+                          >
+                            <Typography
+                              variant="subtitle1"
+                              sx={{
+                                fontWeight: 700,
+                                minWidth: 30,
+                              }}
+                            >
+                              {optionLetter}.
+                            </Typography>
+
+                            <Box
+                              sx={{
+                                flex: 1,
+                                fontSize: 18,
+                              }}
+                              dangerouslySetInnerHTML={{
+                                __html: option,
+                              }}
+                            />
+                          </Box>
+                        }
+                      />
+                    </Box>
+                  );
+                })}
+              </RadioGroup>
+            </FormControl>
+          </Box>
+          <Box
+            sx={{
+              p: 2,
+              maxHeight: "30vh",
+              overflow: "auto",
+              border: "4px solid",
+              borderColor: "primary.main",
+              borderRadius: 2,
+              bgcolor: "background.paper",
+            }}
+          >
+            {questionBanks[activeProgramme?.index]?.questions.map((p, i) => (
+              <Button
+                key={p.questionId}
+                onClick={() => handleQuestionChange(i)}
+                size="small"
+                variant={
+                  questionBanks[activeProgramme?.index]?.questionIndex === i
+                    ? "contained"
+                    : "outlined"
+                }
+                sx={{ mr: 1, mb: 1 }}
+              >
+                {i + 1}
+              </Button>
+            ))}
           </Box>
         </Box>
       )}
