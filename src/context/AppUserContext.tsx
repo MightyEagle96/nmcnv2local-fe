@@ -8,7 +8,18 @@ export type User = {
   state: string;
   role: string;
   centreId: string;
+  _id: string;
+  programmes: Programme[];
+  indexNumber: string;
+  school: string;
 };
+
+interface Programme {
+  _id: string;
+  name: string;
+  code: string;
+  index: number;
+}
 
 type AppUserContextType = {
   user: User | null;

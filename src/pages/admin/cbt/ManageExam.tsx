@@ -28,6 +28,7 @@ interface Candidate {
 
 function ManageExam() {
   const [indexNumber, setIndexNumber] = useState("");
+  const [indexNumber2, setIndexNumber2] = useState("");
   const [candidate, setCandidate] = useState<Candidate | null>(null);
   const [imageUrl, setImageUrl] = useState("");
 
@@ -76,6 +77,21 @@ function ManageExam() {
     }
   };
 
+  const messageCandidate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await httpService.post("examination/messagecandidate", {
+        indexNumber: indexNumber2,
+      });
+
+      if (data) {
+        toast.success(data);
+      }
+    } catch (error) {
+      toastError(error);
+    }
+  };
+
   return (
     <div>
       <div className="container my-4">
@@ -84,7 +100,7 @@ function ManageExam() {
             Manage Active Exam
           </Typography>
         </div>
-        <div className="row">
+        <div className="row d-flex align-items-center">
           <div className="col-lg-4">
             <div className="mb-3">
               <Typography gutterBottom variant="h6">
@@ -105,6 +121,29 @@ function ManageExam() {
                 Get Candidate
               </Button>
             </form>
+          </div>
+          <div className="col-lg-4">
+            <div className="mb-3">
+              <Typography gutterBottom variant="h6">
+                Close Candidate Browser
+              </Typography>
+            </div>
+            <form onSubmit={messageCandidate}>
+              <TextField
+                fullWidth
+                required
+                value={indexNumber2}
+                label="Examination Number"
+                sx={{ mb: 2 }}
+                onChange={(e) => setIndexNumber2(e.target.value)}
+              />
+              <Button color="error" type="submit" variant="contained">
+                Close browser
+              </Button>
+            </form>
+          </div>
+          <div className="col-lg-3">
+            <Button color="warning">Relogin all candidates</Button>
           </div>
         </div>
       </div>
