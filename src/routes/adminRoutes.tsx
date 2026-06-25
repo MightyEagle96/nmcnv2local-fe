@@ -9,6 +9,7 @@ import Examinations from "../pages/admin/cbt/Examinations";
 import MonitorExam from "../pages/admin/cbt/MonitorExam";
 import NotFoundPage from "../pages/common/NotFoundPage";
 import UnauthorizedPage from "../pages/common/UnauthorizedPage";
+import ManageExam from "../pages/admin/cbt/ManageExam";
 
 const publicAdminRoutes = [
   { path: "/", component: <AdminLoginPage /> },
@@ -21,6 +22,7 @@ const privateAdminRoutes = [
   { path: "/cbt/download&upload", component: <DownloadUpload /> },
   { path: "/cbt/examinations", component: <Examinations /> },
   { path: "/cbt/monitorexam", component: <MonitorExam /> },
+  { path: "/cbt/manageexam", component: <ManageExam /> },
   { path: "*", component: <NotFoundPage /> },
 ];
 

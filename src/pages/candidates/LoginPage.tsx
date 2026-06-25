@@ -24,7 +24,7 @@ import { toastError } from "../../components/ErrorToast";
 import { User } from "lucide-react";
 import { base64ToBlobUrl } from "../../assets/imageToBlob";
 
-const Transition = forwardRef(function Transition(
+export const Transition = forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
   },

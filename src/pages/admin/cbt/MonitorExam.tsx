@@ -76,7 +76,6 @@ function MonitorExam() {
 
       setCandidates(data.candidates);
       setCandidatesCount(data.totalCandidates);
-      console.log(data);
     } catch (error) {}
   };
 
