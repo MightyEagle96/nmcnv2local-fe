@@ -46,7 +46,7 @@ function QuestionsDisplay() {
       const { data } = await httpService("cbt/getquestions");
 
       if (data) {
-        const modifiedData = data.map((q: IQuestionBank, index: number) => ({
+        const modifiedData = data.map((q: IQuestionBank) => ({
           ...q,
           questionIndex: 0,
         }));

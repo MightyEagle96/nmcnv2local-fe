@@ -33,7 +33,7 @@ function CandidateExamPage() {
       setConnected(false);
     };
 
-    const onTest = async (test: any) => {
+    const onTest = async () => {
       try {
         const { data } = await httpService("examination/clearcookie");
         if (data) {

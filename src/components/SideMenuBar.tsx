@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toastError } from "./ErrorToast";
 import { httpService } from "../httpService";
 import { base64ToBlobUrl } from "../assets/imageToBlob";
