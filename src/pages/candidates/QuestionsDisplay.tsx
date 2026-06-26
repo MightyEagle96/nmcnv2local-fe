@@ -55,18 +55,18 @@ function QuestionsDisplay() {
 
   const currentQuestion = currentBank?.questions[currentBank.questionIndex];
 
-  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const answer = event.target.value;
+  // const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const answer = event.target.value;
 
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestion?._id]: {
-        questionBankId: currentBank.questionBank ?? "",
-        questionId: currentQuestion?._id ?? "",
-        selectedAnswer: answer,
-      },
-    }));
-  };
+  //   setAnswers((prev) => ({
+  //     ...prev,
+  //     [currentQuestion?._id]: {
+  //       questionBankId: currentBank.questionBank ?? "",
+  //       questionId: currentQuestion?._id ?? "",
+  //       selectedAnswer: answer,
+  //     },
+  //   }));
+  // };
 
   const getData = async () => {
     try {
@@ -97,6 +97,95 @@ function QuestionsDisplay() {
     getData();
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!activeProgramme) return;
+
+      const target = e.target as HTMLElement;
+
+      // Ignore typing in inputs
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
+      const currentBank = questionBanks[activeProgramme.index];
+
+      if (!currentBank) return;
+
+      const currentQuestion = currentBank.questions[currentBank.questionIndex];
+
+      if (!currentQuestion) return;
+
+      const key = e.key.toUpperCase();
+
+      switch (key) {
+        // Option shortcuts
+        case "A":
+        case "B":
+        case "C":
+        case "D":
+        case "E":
+        case "F":
+        case "G":
+        case "H":
+        case "I":
+        case "J": {
+          const optionIndex = key.charCodeAt(0) - 65;
+
+          if (optionIndex < currentQuestion.options.length) {
+            e.preventDefault();
+            selectOption(currentQuestion.options[optionIndex]);
+          }
+
+          break;
+        }
+
+        // Next Question
+        case "N":
+        case "ARROWRIGHT":
+          e.preventDefault();
+          nextQuestion();
+          break;
+
+        // Previous Question
+        case "P":
+        case "ARROWLEFT":
+          e.preventDefault();
+          previousQuestion();
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [questionBanks, activeProgramme, answers]);
+
+  const nextQuestion = () => {
+    if (!activeProgramme) return;
+
+    const currentBank = questionBanks[activeProgramme.index];
+
+    if (currentBank.questionIndex < currentBank.questions.length - 1) {
+      handleQuestionChange(currentBank.questionIndex + 1);
+    }
+  };
+
+  const previousQuestion = () => {
+    if (!activeProgramme) return;
+
+    const currentBank = questionBanks[activeProgramme.index];
+
+    if (currentBank.questionIndex > 0) {
+      handleQuestionChange(currentBank.questionIndex - 1);
+    }
+  };
   const handleQuestionChange = (questionIndex: number) => {
     if (!activeProgramme) return;
 
@@ -115,6 +204,20 @@ function QuestionsDisplay() {
   if (loading) {
     return <QuestionsDisplaySkeleton />;
   }
+
+  const selectOption = (option: string) => {
+    if (!activeProgramme) return;
+
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestion?._id]: {
+        questionBankId: currentBank.questionBank ?? "",
+        questionId: currentQuestion?._id ?? "",
+        selectedAnswer: option,
+      },
+    }));
+  };
+
   return (
     <div>
       <Stack direction={"row"} spacing={1} sx={{ mb: 2 }}>
@@ -160,7 +263,7 @@ function QuestionsDisplay() {
             <FormControl fullWidth>
               <RadioGroup
                 value={answers[currentQuestion._id]?.selectedAnswer ?? ""}
-                onChange={handleAnswerChange}
+                onChange={(e) => selectOption(e.target.value)}
               >
                 {questionBanks[activeProgramme?.index]?.questions[
                   questionBanks[activeProgramme?.index]?.questionIndex
