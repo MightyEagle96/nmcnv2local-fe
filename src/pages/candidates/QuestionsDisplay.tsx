@@ -9,6 +9,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Skeleton,
 } from "@mui/material";
 import { useActiveProgramme } from "../../context/ActiveProgrammeContext";
 import { toastError } from "../../components/ErrorToast";
@@ -22,6 +23,7 @@ export interface IQuestion {
   startGroup: boolean;
   clustered: boolean;
   endGroup: boolean;
+  _id: string;
 }
 
 export interface IQuestionBank {
@@ -35,11 +37,36 @@ export interface IQuestionBank {
   questionsCount: number;
   questionIndex: number;
 }
+
+export interface IUserAnswer {
+  questionBankId: string;
+  questionId: string;
+  selectedAnswer: string;
+}
 function QuestionsDisplay() {
   const { user } = useAppUser();
 
   const { activeProgramme, setActiveProgramme } = useActiveProgramme();
   const [questionBanks, setQuestionBanks] = useState<IQuestionBank[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [answers, setAnswers] = useState<Record<string, IUserAnswer>>({});
+
+  const currentBank = questionBanks[activeProgramme?.index || 0];
+
+  const currentQuestion = currentBank?.questions[currentBank.questionIndex];
+
+  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const answer = event.target.value;
+
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestion?._id]: {
+        questionBankId: currentBank.questionBank ?? "",
+        questionId: currentQuestion?._id ?? "",
+        selectedAnswer: answer,
+      },
+    }));
+  };
 
   const getData = async () => {
     try {
@@ -51,10 +78,10 @@ function QuestionsDisplay() {
           questionIndex: 0,
         }));
 
-        console.log(modifiedData);
-
         setQuestionBanks(modifiedData);
       }
+
+      setLoading(false);
     } catch (error) {
       toastError(error);
     }
@@ -84,6 +111,10 @@ function QuestionsDisplay() {
       ),
     );
   };
+
+  if (loading) {
+    return <QuestionsDisplaySkeleton />;
+  }
   return (
     <div>
       <Stack direction={"row"} spacing={1} sx={{ mb: 2 }}>
@@ -128,8 +159,8 @@ function QuestionsDisplay() {
           <Box>
             <FormControl fullWidth>
               <RadioGroup
-              // value={selectedAnswer}
-              // onChange={handleAnswerChange}
+                value={answers[currentQuestion._id]?.selectedAnswer ?? ""}
+                onChange={handleAnswerChange}
               >
                 {questionBanks[activeProgramme?.index]?.questions[
                   questionBanks[activeProgramme?.index]?.questionIndex
@@ -216,11 +247,18 @@ function QuestionsDisplay() {
                 onClick={() => handleQuestionChange(i)}
                 size="small"
                 variant={
-                  questionBanks[activeProgramme?.index]?.questionIndex === i
+                  questionBanks[activeProgramme.index].questionIndex === i
                     ? "contained"
-                    : "outlined"
+                    : answers[p._id]
+                      ? "outlined"
+                      : "outlined"
                 }
-                sx={{ mr: 1, mb: 1 }}
+                sx={{
+                  bgcolor: answers[p._id] ? "success.light" : undefined,
+                  mr: 1,
+                  mb: 1,
+                  color: answers[p._id] ? "white" : undefined,
+                }}
               >
                 {i + 1}
               </Button>
@@ -233,3 +271,65 @@ function QuestionsDisplay() {
 }
 
 export default QuestionsDisplay;
+
+const QuestionsDisplaySkeleton = () => {
+  return (
+    <Box>
+      {/* Programme buttons */}
+      <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} variant="rounded" width={120} height={40} />
+        ))}
+      </Stack>
+
+      {/* Question number */}
+      <Skeleton width={120} height={25} sx={{ mb: 2 }} />
+
+      {/* Question */}
+      <Skeleton variant="text" height={40} />
+      <Skeleton variant="text" height={40} width="90%" />
+      <Skeleton variant="text" height={40} width="75%" />
+
+      <Box sx={{ mt: 4 }}>
+        {[1, 2, 3, 4].map((i) => (
+          <Box
+            key={i}
+            sx={{
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+              p: 2,
+              mb: 2,
+            }}
+          >
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+              <Skeleton variant="circular" width={24} height={24} />
+
+              <Box sx={{ flex: 1 }}>
+                <Skeleton height={30} width="95%" />
+                <Skeleton height={30} width="75%" />
+              </Box>
+            </Stack>
+          </Box>
+        ))}
+      </Box>
+
+      {/* Question navigator */}
+      <Box
+        sx={{
+          mt: 3,
+          p: 2,
+          border: "4px solid",
+          borderColor: "primary.main",
+          borderRadius: 2,
+        }}
+      >
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
+          {Array.from({ length: 25 }).map((_, i) => (
+            <Skeleton key={i} variant="rounded" width={40} height={35} />
+          ))}
+        </Stack>
+      </Box>
+    </Box>
+  );
+};
