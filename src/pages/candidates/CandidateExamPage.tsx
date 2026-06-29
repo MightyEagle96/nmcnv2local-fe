@@ -7,6 +7,7 @@ import { useAppUser } from "../../context/AppUserContext";
 import { toastError } from "../../components/ErrorToast";
 import { httpService } from "../../httpService";
 import QuestionsDisplay from "./QuestionsDisplay";
+import { ExamProvider } from "../../context/exam/ExamContext";
 
 function CandidateExamPage() {
   const [connected, setConnected] = useState(socket.connected);
@@ -62,17 +63,19 @@ function CandidateExamPage() {
 
   return (
     <div>
-      <div className="row m-0">
-        <div className="col-lg-10 p-3">
-          <QuestionsDisplay />
+      <ExamProvider>
+        <div className="row m-0">
+          <div className="col-lg-10 p-3">
+            <QuestionsDisplay />
+          </div>
+          <div
+            style={{ minHeight: "100vh", overflowY: "scroll" }}
+            className="col-lg-2 bg-light"
+          >
+            <SideMenuBar />
+          </div>
         </div>
-        <div
-          style={{ minHeight: "100vh", overflowY: "scroll" }}
-          className="col-lg-2 bg-light"
-        >
-          <SideMenuBar />
-        </div>
-      </div>
+      </ExamProvider>
     </div>
   );
 }

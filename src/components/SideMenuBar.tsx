@@ -2,15 +2,30 @@ import { useEffect, useState } from "react";
 import { toastError } from "./ErrorToast";
 import { httpService } from "../httpService";
 import { base64ToBlobUrl } from "../assets/imageToBlob";
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, Divider, Typography } from "@mui/material";
 import { User } from "lucide-react";
 import { useAppUser } from "../context/AppUserContext";
 import { useActiveProgramme } from "../context/ActiveProgrammeContext";
+import { useExam } from "../context/exam/ExamContext";
 
 function SideMenuBar() {
   const [imageUrl, setImageUrl] = useState("");
   const { user } = useAppUser();
   const { activeProgramme } = useActiveProgramme();
+
+  const {
+    totalAnswered,
+    totalQuestions,
+    answeredByBank,
+    questionBanks,
+    answeredByProgramme,
+  } = useExam();
+
+  const currentBank = questionBanks.find(
+    (b) => b.programme === activeProgramme?._id,
+  );
+
+  console.log(currentBank?.questions.length);
   const getData = async () => {
     try {
       const { data } = await httpService("cbt/avatar");
@@ -121,6 +136,43 @@ function SideMenuBar() {
           }}
         >
           {activeProgramme?.name}
+        </Typography>
+
+        <Divider />
+
+        <Typography variant="caption">Answered By Bank:</Typography>
+        <Typography
+          variant="h6"
+          className=""
+          sx={{
+            fontWeight: 700,
+            textTransform: "capitalize",
+            wordBreak: "break-word",
+          }}
+        >
+          {answeredByProgramme[activeProgramme?._id || ""]
+            ? answeredByProgramme[activeProgramme?._id || ""]
+            : 0}
+          /{currentBank?.questions.length}
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          mb: 3,
+        }}
+      >
+        <Typography variant="caption">Total Questions:</Typography>
+        <Typography
+          variant="h6"
+          className=""
+          sx={{
+            fontWeight: 700,
+            textTransform: "capitalize",
+            wordBreak: "break-word",
+          }}
+        >
+          {totalAnswered}/{totalQuestions}
         </Typography>
       </Box>
     </div>
