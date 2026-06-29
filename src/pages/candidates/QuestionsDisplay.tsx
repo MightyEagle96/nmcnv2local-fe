@@ -17,6 +17,7 @@ import { toastError } from "../../components/ErrorToast";
 
 import { useExam } from "../../context/exam/ExamContext";
 import QuestionsButton from "./QuestionsButton";
+import { QuestionsDisplaySkeleton } from "./QuestionsDisplayDump";
 
 function QuestionsDisplay() {
   const { user } = useAppUser();
@@ -145,7 +146,7 @@ function QuestionsDisplay() {
   // =========================
   // LOADING STATE
   // =========================
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <QuestionsDisplaySkeleton />;
 
   return (
     <div>

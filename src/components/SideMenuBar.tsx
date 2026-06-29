@@ -16,7 +16,7 @@ function SideMenuBar() {
   const {
     totalAnswered,
     totalQuestions,
-    answeredByBank,
+
     questionBanks,
     answeredByProgramme,
   } = useExam();
@@ -140,7 +140,7 @@ function SideMenuBar() {
 
         <Divider />
 
-        <Typography variant="caption">Answered By Bank:</Typography>
+        <Typography variant="caption">Answered:</Typography>
         <Typography
           variant="h6"
           className=""
@@ -157,24 +157,26 @@ function SideMenuBar() {
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          mb: 3,
-        }}
-      >
-        <Typography variant="caption">Total Questions:</Typography>
-        <Typography
-          variant="h6"
-          className=""
+      {questionBanks.length > 1 && (
+        <Box
           sx={{
-            fontWeight: 700,
-            textTransform: "capitalize",
-            wordBreak: "break-word",
+            mb: 3,
           }}
         >
-          {totalAnswered}/{totalQuestions}
-        </Typography>
-      </Box>
+          <Typography variant="caption">Total Questions Answered:</Typography>
+          <Typography
+            variant="h6"
+            className=""
+            sx={{
+              fontWeight: 700,
+              textTransform: "capitalize",
+              wordBreak: "break-word",
+            }}
+          >
+            {totalAnswered}/{totalQuestions}
+          </Typography>
+        </Box>
+      )}
     </div>
   );
 }
