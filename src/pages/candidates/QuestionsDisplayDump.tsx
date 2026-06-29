@@ -44,9 +44,9 @@ export interface IUserAnswer {
   selectedAnswer: string;
 }
 
-interface IExamState {
-  answers: Record<string, IUserAnswer>;
-}
+// interface IExamState {
+//   answers: Record<string, IUserAnswer>;
+// }
 function QuestionsDisplayDump() {
   const { user } = useAppUser();
 
